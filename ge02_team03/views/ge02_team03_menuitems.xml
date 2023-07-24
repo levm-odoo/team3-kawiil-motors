@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.actions.act_window" id="motorcycles_map_action">
+            <field name="name">Registered Motorcycles</field>
+            <field name="res_model">motorcycle.registry</field>
+            <field name="view_mode">map</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create the first Registry
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Registered Motorcycles"
+                  id="menu-map"
+                  sequence="1"
+                  web_icon="ge02_team03,static/description/icon.png">
+
+            <menuitem id="menu_map_sub" name="Registered Motorcycles" sequence="2" action="motorcycles_map_action"/>
+        </menuitem>
+    </data>
+</odoo> 
