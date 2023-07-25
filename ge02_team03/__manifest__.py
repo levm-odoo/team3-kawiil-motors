@@ -14,5 +14,5 @@
     'demo' : [
 
     ],
-    'application' : True,
+    'application' : False,
 }
