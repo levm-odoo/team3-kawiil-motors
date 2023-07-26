@@ -62,6 +62,8 @@ class MotorcycleRegistry(models.Model):
             if not registry.vin[0:2] == 'KA':
                 raise ValidationError('Odoopsie! Only motorcycles from Kauil Motors are allowed')
                 
+    #KAID220M000001
+    
                     
     @api.model_create_multi
     def create(self, vals_list):
