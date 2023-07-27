@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_menu_motorcycles" name="Portal layout : motorcycles menu entries" inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'motorcycles' or motorcycles or motorcycle" t-attf-class="breadcrumb-item #{'active ' }">
+                <a t-attf-href="/my/motorcycles?{{ keep_query() }}">Motorcycles</a>
+            </li>
+            <li t-if="motorcycle" class="breadcrumb-item active">
+                <t t-out="motorcycle.registry_number"/>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_motorcycles" name="Show Motorcycles" customize_show="True" inherit_id="portal.portal_my_home" priority="20">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Motorcycles</t>
+                <t t-set="url" t-value="'/my/motorcycles'"/>
+                <t t-set="placeholder_count" t-value="'registries_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_motorcycles" name="My Motorcycles">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Motorcycles</t>
+            </t>
+            <t t-if="motorcycles" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Registry Number</th>
+                        <th class="text-end">VIN</th>
+                        <th class="text-end">License Plate</th>
+                    </tr>
+                </thead>
+                <t t-foreach="motorcycles" t-as="motorcycle">
+                    <tr>
+                        <td><a t-att-href="motorcycle.get_portal_url()"><t t-out="motorcycle.registry_number"/></a></td>
+                        <td class="text-end"><span t-field="motorcycle.vin"/></td>
+                        <td class="text-end"><span t-field="motorcycle.license_plate"/></td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no motorcycles registred for your account.</p>
+        </t>
+    </template>
+
+    <template id="motorcycles_portal_template" name="Motorcycles Portal Template" inherit_id="portal.portal_sidebar" primary="True">
+        <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+            <t t-set="o_portal_fullwidth_alert">
+
+                <t t-call="portal.portal_back_in_edit_mode"/>
+            </t>
+
+            <div class="row mt16 o_portal_sale_sidebar">
+
+                <t t-call="portal.portal_record_sidebar">
+                    <t t-set="classes" t-value="'col-lg-auto d-print-none'"/>
+
+                    <t t-set="title">
+                        <h2 class="mb-0" style=""><b t-field="motorcycle.owner_id" data-id="owner"/> </h2>
+                        <p style="padding:0; margin:0;">Email: <b style="p" t-field="motorcycle.owner_id.email" data-id="owner_email"/></p>
+                        <p style="padding:0; margin:0;">Country: <b style="p" t-field="motorcycle.owner_id.country_id.name" data-id="owner_address"/></p>
+                        <p style="padding:0; margin:0;">State: <b style="p" t-field="motorcycle.owner_id.state_id.name" data-id="owner_state"/></p>
+                        
+                    </t>
+                </t>
+
+                <div id="quote_content" class="col-12 col-lg justify-content-end">
+
+
+                    <div t-attf-class="card #{'pb-5' if report_type == 'html' else ''}" id="portal_motorcycle_content">
+                        <div t-call="ge08_team03.motorcycle_portal_content"/>
+                    </div>
+
+
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="motorcycle_portal_content" name="Motorcycle Portal Content">
+
+        <div id="introduction" t-attf-class="pb-2 pt-3 #{'card-header bg-white' if report_type == 'html' else ''}">
+            <h2 class="my-0">
+                  Motorcycle Information
+              </h2>
+          </div>
+          <div t-attf-class="#{'card-body' if report_type == 'html' else ''}">
+            <t t-if="motorcycle.lot_id.product_id.product_tmpl_id.image_1024">
+                <img class="oe_right" t-att-src="image_data_uri(motorcycle.lot_id.product_id.product_tmpl_id.image_1024)" alt="Image"/>
+            </t>
+            <p style="padding:0; margin:0;">Name: <b style="p" t-field="motorcycle.lot_id.product_id.product_tmpl_id.name" data-id="product_template"/></p>
+            <p style="padding:0; margin:0;">Registry Date: <b style="p" t-field="motorcycle.registry_date" t-options='{"widget": "date"}' data-id="registry_date"/></p>
+            <p style="padding:0; margin:0;">VIN: <b style="p" t-field="motorcycle.vin" data-id="registry_vin"/></p>
+            <p style="padding:0; margin:0;">License Plate: <b style="p" t-field="motorcycle.license_plate" data-id="registry_license_plate"/></p>
+            <p style="padding:0; margin:0;">Make: <b style="p" t-field="motorcycle.make" data-id="registry_make"/></p>
+            <p style="padding:0; margin:0;">Model: <b style="p" t-field="motorcycle.model" data-id="registry_model"/></p>
+            <p style="padding:0; margin:0;">Mileage: <b style="p" t-field="motorcycle.current_mileage" data-id="registry_mileage"/></p>
+          </div>
+  
+          
+    </template>
+</odoo>
