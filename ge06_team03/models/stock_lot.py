@@ -4,7 +4,7 @@ class StockLot(models.Model):
     _inherit = 'stock.lot'
     
     name = fields.Char(compute="_compute_vin", store=True, default="New")
-    serial_number = fields.Char(default=" ")
+    serial_number = fields.Char(default="")
 
     @api.depends('product_id')
     def _compute_vin(self):
