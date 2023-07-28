@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="motorcycle_id_form_inherit_motorcycle_registry" model="ir.ui.view">
+        <field name="name">motorcycle.id.form.inherit.motorcycle.registry</field>
+		<field name="model">motorcycle.registry</field>
+        <field name="inherit_id" ref="motorcycle_registry.motorcycle_registry_view_form"/>
+        <field name="arch" type="xml">
+			<xpath expr="//sheet//field[@name='picture']" position="before">
+				<div class="oe_button_box" name="button_box">
+            		<button type="object" name="action_view_repair" class="oe_stat_button" icon="fa-solid fa-wrench">
+                    	<field name="repair_count" widget="statinfo" string="Repairs"/>
+            		</button>
+				</div>
+			</xpath>
+		</field>
+	</record>
+</odoo>
