@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="motorcycle_registry_view_form_inherit_ge08_team03" model="ir.ui.view">
+        <field name="name">motorcycle.registry.view.form.inherit.ge08.team03</field>
+        <field name="model">motorcycle.registry</field>
+        <field name="inherit_id" ref="motorcycle_registry.motorcycle_registry_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Visualization Access">
+                    <group>
+                        <field name="is_public" string = "Public"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+            
+</odoo>
