@@ -3,11 +3,6 @@ from odoo import fields,models
 class RepairOrder(models.Model):
     _name="repair.order"
     _inherit = ['portal.mixin','repair.order']
-    
-    product_id = fields.Many2one(
-        'product.product', string='Product to Repair',
-        domain="[('type', 'in', ['product', 'consu']), '|', ('company_id', '=', company_id), ('company_id', '=', False)]",
-        readonly=True, required=True, states={'draft': [('readonly', False)]}, check_company=True)
 
 
     def _compute_access_url(self):
