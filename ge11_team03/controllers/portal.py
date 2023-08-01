@@ -18,7 +18,10 @@ class CustomerPortal(portal.CustomerPortal):
         Tickets = request.env['repair.order']
         if 'tickets_count' in counters:
             values['tickets_count'] = Tickets.search_count(self._prepare_tickets_domain(partner)) \
-                if Tickets.check_access_rights('read', raise_exception=False) else 0
+                if Tickets.check_access_rights('read', raise_exception=False) else 1
+        else:
+            values['tickets_count'] = 1
+        print("TEST",values['tickets_count'])
 
         return values
 
@@ -84,12 +87,14 @@ class CustomerPortal(portal.CustomerPortal):
             specified_lot = next((lot for lot in lots if lot['id'] == int(kw['ticket_lot'])), None)
             print('TEST',specified_lot)
             product_id = specified_lot['product_id']
+            product_uom = request.env['product.template'].browse(product_id[0]).uom_id.id
             request.env['repair.order'].create(
                 {
                     'description':kw['ticket_description'],
                     'lot_id':kw['ticket_lot'],
                     'product_id':product_id[0],
-                    'partner_id':partner.id
+                    'partner_id':partner.id,
+                    'product_uom':product_uom
                 }
                 )
             return self.portal_my_tickets()
