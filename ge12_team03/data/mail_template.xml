@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_template_new_user" model="mail.template">
+            <field name="name">New Portal Account Created</field>
+            <field name="model_id" ref="ge12_team03.model_motorcycle_registry"/>
+            <!-- <field name="auto_delete" eval="True"/> -->
+            <field name="email_to">{{object.user.email}}</field>
+            <field name="subject">New Credentials</field>
+            <!-- <field name="report_template" ref="action_example_pdf"/> -->
+            <field name="body_html" type="html">
+                <p>
+                 Hi <t t-out="object.user.name"/>,
+                    <br/><br/>
+                    In this email we attach the necessary credentials so that you can access the page 
+                    with your user profile. 
+                    <br/>We recommend you to change the default password to keep your account safe.
+                    <br/><br/>
+                    User: <t t-out="object.user.login"/>
+                    <br/><br/>
+                    Password: test-1
+                    <br/>
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>
