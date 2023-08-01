@@ -1,4 +1,4 @@
-from odoo import http
+from odoo import http, Command
 from odoo.addons.portal.controllers import portal
 from odoo.addons.portal.controllers.portal import pager as portal_pager
 from odoo.http import request
@@ -18,10 +18,10 @@ class CustomerPortal(portal.CustomerPortal):
         Tickets = request.env['repair.order']
         if 'tickets_count' in counters:
             values['tickets_count'] = Tickets.search_count(self._prepare_tickets_domain(partner)) \
-                if Tickets.check_access_rights('read', raise_exception=False) else 1
-        else:
-            values['tickets_count'] = 1
-        print("TEST",values['tickets_count'])
+                if Tickets.check_access_rights('read', raise_exception=False) else 0
+        
+        # if values.get('tickets_count',0) == 0:
+        #     values['tickets_count'] = 1
 
         return values
 
@@ -30,10 +30,10 @@ class CustomerPortal(portal.CustomerPortal):
 
         partner = request.env.user.partner_id
         values = self._prepare_portal_layout_values()
-
+        print("PREPARE VALUES 1")
         url = "/my/tickets"
         domain = self._prepare_tickets_domain(partner)
-        
+        print("PREPARE VALUES 2")
         pager_values = portal_pager(
             url=url,
             total=Tickets.search_count([]),
@@ -41,7 +41,7 @@ class CustomerPortal(portal.CustomerPortal):
             step=self._items_per_page,
             url_args={},
         )
-        
+        print("PREPARE VALUES 3")
         searchbar_inputs = {
                 'all': {'label': _('All'), 'input': 'all', 'domain': []},
                 'name': {'label': _('Name'), 'input': 'name', 'domain': [('name', 'like', search)]},
@@ -63,14 +63,15 @@ class CustomerPortal(portal.CustomerPortal):
             'searchbar_inputs':searchbar_inputs,
             'default_url': url,
         })
-
+        print("TICKETS SUDO",tickets.sudo())
+        print("Repair order 0",tickets.sudo()[0])
         return values
 
     ##  Controllers
     @http.route(['/my/tickets', '/my/tickets/page/<int:page>'], type='http', auth="user", website=True)
     def portal_my_tickets(self, search="",search_in="all",**kwargs):
         values = self._prepare_repair_portal_rendering_values(search,search_in,**kwargs)
-        
+        print("Finished values calculation")
         return request.render("ge11_team03.portal_my_tickets", values)
     
     @http.route(['/my/tickets/new'], type='http', methods=['GET','POST'], auth="user", website=True)
@@ -84,19 +85,20 @@ class CustomerPortal(portal.CustomerPortal):
             return request.render("ge11_team03.portal_new_ticket", values)
         
         elif(request.httprequest.method == 'POST'):
+            lot_record = request.env['stock.lot'].browse(int(kw['ticket_lot']))
             specified_lot = next((lot for lot in lots if lot['id'] == int(kw['ticket_lot'])), None)
-            print('TEST',specified_lot)
             product_id = specified_lot['product_id']
-            product_uom = request.env['product.template'].browse(product_id[0]).uom_id.id
+            product_template = request.env['product.template'].browse(int(product_id[0]))
             request.env['repair.order'].create(
                 {
                     'description':kw['ticket_description'],
-                    'lot_id':kw['ticket_lot'],
-                    'product_id':product_id[0],
-                    'partner_id':partner.id,
-                    'product_uom':product_uom
+                    'lot_id': lot_record.id,
+                    'partner_id': partner.id,
+                    'product_id': product_id[0],
+                    'product_uom': product_template.uom_id.id
                 }
                 )
+            print("PASSED CREATE")
             return self.portal_my_tickets()
     
     @http.route(['/my/tickets/<int:ticket_id>'], type='http', auth="public", website=True)

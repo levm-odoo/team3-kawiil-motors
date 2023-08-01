@@ -8,7 +8,7 @@ This Module is used to allow motorcycle owners to see their registries and find 
     "version": "1.0.0",
     "category": "Kauil/Portal",
     "license": "OPL-1",
-    "depends": ["repair"],
+    "depends": ["ge09_team03","portal"],
     "data": [
         'views/repair_portal_templates.xml'
     ],

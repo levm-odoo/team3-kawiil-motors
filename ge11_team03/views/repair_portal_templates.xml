@@ -86,7 +86,7 @@
           </div>
           <div t-attf-class="#{'card-body' if report_type == 'html' else ''}">
             <p style="padding:0; margin:0;">Name: <b style="p" t-field="ticket.name" data-id="ticket_name"/></p>
-            <p style="padding:0; margin:0;">Product: <b style="p" t-field="ticket.product_id.product_tmpl_id.name" data-id="product_name"/></p>
+            <p style="padding:0; margin:0;">Product: <b style="p" t-field="ticket.product_id.name" data-id="product_name"/></p>
             <p style="padding:0; margin:0;">VIN: <b style="p" t-field="ticket.lot_id.name" data-id="ticket_vin"/></p>
             <p style="padding:0; margin:0;">Description: <b style="p" t-field="ticket.description" data-id="ticket_description"/></p>
           </div>
