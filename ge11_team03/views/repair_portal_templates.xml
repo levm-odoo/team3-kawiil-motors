@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_menu_tickets" name="Portal layout : tickets menu entries" inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'tickets' or tickets or ticket" t-attf-class="breadcrumb-item #{'active ' }">
+                <a t-attf-href="/my/tickets?{{ keep_query() }}">Tickets</a>
+            </li>
+            <li t-if="ticket" class="breadcrumb-item active">
+                <t t-out="ticket.name"/>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_tickets" name="Show Tickets" customize_show="True" inherit_id="portal.portal_my_home" priority="20">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Tickets</t>
+                <t t-set="url" t-value="'/my/tickets'"/>
+                <t t-set="placeholder_count" t-value="'tickets_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_tickets" name="My Tickets">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Tickets</t>
+            </t>
+            <div style="width:100%;min-height:50px">
+                <a href="/my/tickets/new" style="float:right;">New Ticket</a>
+            </div>
+            <t t-if="tickets" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th class="text-end">Product</th>
+                    </tr>
+                </thead>
+                <t t-foreach="tickets" t-as="ticket">
+                    <tr>
+                        <td><a t-att-href="ticket.get_portal_url()"><t t-out="ticket.name"/></a></td>
+                        <td><span t-field="ticket.state"/></td>
+                        <td class="text-end"><span t-field="ticket.product_id.product_tmpl_id.name"/></td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no tickets registred for your account.</p>
+        </t>
+    </template>
+
+    <template id="tickets_portal_template" name="Tickets Portal Template" inherit_id="portal.portal_sidebar" primary="True">
+        <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+            <t t-set="o_portal_fullwidth_alert">
+
+                <t t-call="portal.portal_back_in_edit_mode"/>
+            </t>
+            <div class="row mt16 o_portal_sale_sidebar">
+
+                <t t-call="portal.portal_record_sidebar">
+                    <t t-set="classes" t-value="'col-lg-auto d-print-none'"/>
+
+                    <t t-set="title">
+                        <h2 class="mb-0" style=""><b t-field="ticket.partner_id" data-id="partner"/> </h2>
+                        <p style="padding:0; margin:0;">Email: <b style="p" t-field="ticket.partner_id.email" data-id="partner_email"/></p>
+                    </t>
+                </t>
+                <div id="quote_content" class="col-12 col-lg justify-content-end">
+                    <div t-attf-class="card #{'pb-5' if report_type == 'html' else ''}" id="portal_ticket_content">
+                        <div t-call="ge11_team03.ticket_portal_content"/>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="ticket_portal_content" name="Ticket Portal Content">
+        <div id="introduction" t-attf-class="pb-2 pt-3 #{'card-header bg-white' if report_type == 'html' else ''}">
+            <h2 class="my-0">
+                  Ticket Information
+                  <span style="float:right; font-size:20px">
+                    <p t-field="ticket.state" data-id="ticket_state"/>
+                </span>
+              </h2>
+          </div>
+          <div t-attf-class="#{'card-body' if report_type == 'html' else ''}">
+            <p style="padding:0; margin:0;">Name: <b style="p" t-field="ticket.name" data-id="ticket_name"/></p>
+            <p style="padding:0; margin:0;">Product: <b style="p" t-field="ticket.product_id.product_tmpl_id.name" data-id="product_name"/></p>
+            <p style="padding:0; margin:0;">VIN: <b style="p" t-field="ticket.lot_id.name" data-id="ticket_vin"/></p>
+            <p style="padding:0; margin:0;">Description: <b style="p" t-field="ticket.description" data-id="ticket_description"/></p>
+          </div>
+    </template>
+
+    <template id="portal_new_ticket" name="Portal New Ticket" inherit_id="portal.portal_sidebar" primary="True">
+        <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+            <t t-set="o_portal_fullwidth_alert">
+                <t t-call="portal.portal_back_in_edit_mode"/>
+            </t>
+            <div class="row mt16 o_portal_sale_sidebar">
+
+                <t t-call="portal.portal_record_sidebar">
+                    <t t-set="classes" t-value="'col-lg-auto d-print-none'"/>
+
+                    <t t-set="title">
+                        <h2 class="mb-0" style=""><b t-field="partner.name" data-id="partner_name"/> </h2>
+                        <p style="padding:0; margin:0;">Email: <b style="p" t-field="partner.email" data-id="partner_email"/></p>
+                    </t>
+                </t>
+
+                <div id="quote_content" class="col-12 col-lg justify-content-end">
+                    <div t-attf-class="card #{'pb-5' if report_type == 'html' else ''}" id="portal_motorcycle_content">
+                        <div id="introduction" t-attf-class="pb-2 pt-3 #{'card-header bg-white' if report_type == 'html' else ''}">
+                            <h2 class="my-0">
+                                  Ticket Information
+                              </h2>
+                          </div>
+                          <div t-attf-class="#{'card-body' if report_type == 'html' else ''}">
+                            <form action="/my/tickets/new" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                <label for="ticket_lot">VIN:</label>
+                                <select name="ticket_lot">
+                                    <t t-foreach = "lots" t-as="lot">
+                                        <option t-att-value="lot['id']"><t t-esc="lot['name']"/>
+                                        </option>
+                                    </t>
+                                </select>
+                                <label for="ticket_description">Description:</label>
+                                <input type="area" placeholder="My Description" name="ticket_description"></input>
+                                <input type="submit" value="Create Ticket"/>
+                            </form>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>
