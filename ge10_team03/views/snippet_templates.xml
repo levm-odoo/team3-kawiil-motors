@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="motorcycle_snippet_id" inherit_id="website.snippets" name="Motorcycle Snippet">
+            <xpath expr="//div[@id='snippet_structure']/div[@class='o_panel_body']" position="inside">
+                <t t-snippet="ge10_team03.motorcycle_snippet"
+                t-thumbnail="ge10_team03/static/src/img/s_motorcycle.svg"/>
+            </xpath>
+        </template>
+
+        <template id="motorcycle_snippet" name="Motorcycle Snippet">
+            <section>
+                <div class="container">
+                    <h2><center>How much have our bikes travelled around the world?</center></h2>
+                </div>
+                <div id="mileage">
+                    <b><center>Our bikes have travelled 0 miles worldwide!</center></b>
+                </div>
+            </section> 
+        </template>
+    </data>
+</odoo>
